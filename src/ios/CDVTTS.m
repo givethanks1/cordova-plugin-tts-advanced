@@ -103,8 +103,14 @@
 }
 
 - (void)stop:(CDVInvokedUrlCommand*)command {
-    [synthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryImmediate];
-    [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    /*[synthesizer pauseSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+      [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+     based on: https://stackoverflow.com/questions/19672814/an-issue-with-avspeechsynthesizer-any-workarounds/39422205#39422205 */
+    if([synthesizer isSpeaking]) {
+        [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+        synthesizer = [AVSpeechSynthesizer new];
+        synthesizer.delegate = self;
+    }
 }
 
 - (void)checkLanguage:(CDVInvokedUrlCommand *)command {
